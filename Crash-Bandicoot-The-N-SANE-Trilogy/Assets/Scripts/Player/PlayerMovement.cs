@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,15 +8,18 @@ public class PlayerMovement : MonoBehaviour
     //Player Movement
     CharacterController controller;
     Vector2 horizontalInput;
+    float smoothTime = 0.05f;
+    float currentVelocity;
 
     //Gravity
-    float gravity = -30; // -9.81
+    public float gravity = -30; // -9.81
     [SerializeField] float speed;
     Vector3 verticalVelocity = Vector3.zero;
     [SerializeField] LayerMask groundMask;
     bool isGrounded;
     bool jumped;
     public bool isWalking;
+    Vector3 direction;
 
     //Reference
     MainMenu _mainMenu;
@@ -34,13 +38,22 @@ public class PlayerMovement : MonoBehaviour
     {
         if(!_mainMenu.paused)
         {
-            Vector3 horizontalVelocity = (transform.right * horizontalInput.x + transform.forward * horizontalInput.y) * speed;
-            controller.Move(horizontalVelocity * Time.deltaTime);
-
-            if(isWalking) { FindObjectOfType<AudioManager>().Play("Footsteps"); }
-            
+            Move();            
             Jump();
         } 
+    }
+
+    void Move()
+    {
+        if(horizontalInput.sqrMagnitude == 0) return;
+        direction = new Vector3(horizontalInput.x, 0.0f, horizontalInput.y);
+        controller.Move(direction* speed * Time.deltaTime);
+
+        var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, smoothTime);
+        transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
+        
+        FindObjectOfType<AudioManager>().Play("Footsteps");
     }
 
 
