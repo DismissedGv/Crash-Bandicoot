@@ -7,10 +7,18 @@ public class MainMenu : MonoBehaviour
 
     //References
     public GameObject pauseMenu;
+    public GameObject loading;
+    string music = "Music";
 
-    void Start()
+    void Awake()
     {
-       
+       Invoke("LoadingScreen", 3);
+    }
+
+    void LoadingScreen()
+    {
+        loading.SetActive(false);
+        FindObjectOfType<AudioManager>().Play(music);
     }
 
     public void Play()
@@ -70,5 +78,22 @@ public class MainMenu : MonoBehaviour
         Time.timeScale = 1f;
         paused = false;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void Level1()
+    {
+        SceneManager.LoadScene("Level 1");
+    }
+    public void Level2()
+    {
+        SceneManager.LoadScene("Level 2");
+    }
+    public void Level3()
+    {
+        SceneManager.LoadScene("Level 3");
+    }
+    public void Level4()
+    {
+        SceneManager.LoadScene("Level 4");
     }
 }

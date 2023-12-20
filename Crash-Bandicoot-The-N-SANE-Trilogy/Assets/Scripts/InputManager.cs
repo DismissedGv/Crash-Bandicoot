@@ -30,6 +30,7 @@ public class InputManager : MonoBehaviour
     playerAction.MovementInput.canceled += ctx => _playerMovement.isWalking = false;
 
     playerAction.Jump.performed += _ => _playerMovement.OnJumpPressed();
+    playerAction.Attack.performed += _ => _playerMovement.Attack();
 
     playerAction.Pause.performed += _ => _mainMenu.MenuButton();
   }

@@ -53,6 +53,15 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a18b3e6-f178-46e3-985e-5bfa906a9d57"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""action"": ""MovementInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1101292-6004-497a-88dd-d5ce1747e04e"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         m_PlayerAction_MovementInput = m_PlayerAction.FindAction("MovementInput", throwIfNotFound: true);
         m_PlayerAction_Jump = m_PlayerAction.FindAction("Jump", throwIfNotFound: true);
         m_PlayerAction_Pause = m_PlayerAction.FindAction("Pause", throwIfNotFound: true);
+        m_PlayerAction_Attack = m_PlayerAction.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerAction_MovementInput;
     private readonly InputAction m_PlayerAction_Jump;
     private readonly InputAction m_PlayerAction_Pause;
+    private readonly InputAction m_PlayerAction_Attack;
     public struct PlayerActionActions
     {
         private @PlayerController m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         public InputAction @MovementInput => m_Wrapper.m_PlayerAction_MovementInput;
         public InputAction @Jump => m_Wrapper.m_PlayerAction_Jump;
         public InputAction @Pause => m_Wrapper.m_PlayerAction_Pause;
+        public InputAction @Attack => m_Wrapper.m_PlayerAction_Attack;
         public InputActionMap Get() { return m_Wrapper.m_PlayerAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         private void UnregisterCallbacks(IPlayerActionActions instance)
@@ -245,6 +271,9 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         public void RemoveCallbacks(IPlayerActionActions instance)
@@ -267,5 +296,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         void OnMovementInput(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }

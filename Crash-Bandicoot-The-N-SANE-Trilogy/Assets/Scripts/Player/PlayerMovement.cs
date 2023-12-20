@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 horizontalInput;
     float smoothTime = 0.05f;
     float currentVelocity;
+    public bool isAttacking;
 
     //Gravity
     public float gravity = -30; // -9.81
@@ -23,13 +24,11 @@ public class PlayerMovement : MonoBehaviour
 
     //Reference
     MainMenu _mainMenu;
-    InputManager _inputManager;
 
     void Awake()
     {
         //References
         controller = GetComponent<CharacterController>();
-        _inputManager = GetComponent<InputManager>();
         _mainMenu = GameObject.Find("Canvas").GetComponent<MainMenu>();
     }
     
@@ -53,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, smoothTime);
         transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
         
-        FindObjectOfType<AudioManager>().Play("Footsteps");
+        // FindObjectOfType<AudioManager>().Play("Footsteps");
     }
 
 
@@ -98,11 +97,27 @@ public class PlayerMovement : MonoBehaviour
         }
    }
 
-//    void OnTriggerEnter(Collider other)
-//    {
-//         if(other.gameObject.CompareTag("Zombie"))
-//         {
-//             other.GetComponent<EnemyBehaviour>().OnAware();
-//         }
-//    }
+   public void Attack()
+   {
+    if(!isAttacking)
+    {
+        isAttacking = true;
+        FindObjectOfType<AudioManager>().Play("Spin");
+        Invoke("AttackReset", .8f);
+    }
+   }
+
+   void AttackReset()
+   {
+    isAttacking = false;
+   }
+
+   void OnCollision(Collider other)
+   {
+        if(other.gameObject.CompareTag("Crate") && isAttacking)
+        {
+            Destroy(other.gameObject);
+            FindObjectOfType<AudioManager>().Play("Crate Break");
+        }
+   }
 }
