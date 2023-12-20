@@ -103,6 +103,10 @@ public class PlayerMovement : MonoBehaviour
     {
         isAttacking = true;
         FindObjectOfType<AudioManager>().Play("Spin");
+        // if(OnCollision)
+        // {
+
+        // }
         Invoke("AttackReset", .8f);
     }
    }

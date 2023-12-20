@@ -12,7 +12,8 @@ public class MainMenu : MonoBehaviour
 
     void Awake()
     {
-       Invoke("LoadingScreen", 3);
+        loading.SetActive(true);
+        Invoke("LoadingScreen", 3);
     }
 
     void LoadingScreen()
